@@ -15,6 +15,7 @@ from guided_diffusion.script_util import (
 )
 from guided_diffusion.train_util import TrainLoop
 
+from dataloader import get_dataloader, ACDCDataset
 
 def main():
     args = create_argparser().parse_args()
@@ -30,12 +31,21 @@ def main():
     schedule_sampler = create_named_schedule_sampler(args.schedule_sampler, diffusion)
 
     logger.log("creating data loader...")
-    data = load_data(
-        data_dir=args.data_dir,
-        batch_size=args.batch_size,
-        image_size=args.image_size,
-        class_cond=args.class_cond,
-    )
+    # data = load_data(
+    #     data_dir=args.data_dir,
+    #     batch_size=args.batch_size,
+    #     image_size=args.image_size,
+    #     class_cond=args.class_cond,
+    # )
+    
+    root="./data/acdc/data_ED_ES/"
+    dataset = ACDCDataset(root,  split='train', transforms=None)
+    dataloader = get_dataloader(dataset, batch_size=1, num_workers=0, train=False)    
+    def data_generator(dataloader):
+        while True:  # Ensures infinite loop, useful for training multiple epochs
+            for batch in dataloader:
+                yield batch
+    data = data_generator(dataloader)
 
     logger.log("training...")
     TrainLoop(
