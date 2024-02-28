@@ -45,21 +45,23 @@ def model_and_diffusion_defaults():
     Defaults for image training.
     """
     res = dict(
-        image_size=64,
-        num_channels=128,
-        num_res_blocks=2,
+        image_size=128,
+        num_channels=8,
+        num_res_blocks=1,
         num_heads=4,
         num_heads_upsample=-1,
         num_head_channels=-1,
-        attention_resolutions="16,8",
-        channel_mult="",
+        attention_resolutions="10",
+        channel_mult="1,2,4,4",
         dropout=0.0,
         class_cond=False,
         use_checkpoint=False,
         use_scale_shift_norm=True,
-        resblock_updown=False,
+        resblock_updown=True,
         use_fp16=False,
         use_new_attention_order=False,
+        dims=3,
+        in_channels=1,
     )
     res.update(diffusion_defaults())
     return res
@@ -95,6 +97,8 @@ def create_model_and_diffusion(
     resblock_updown,
     use_fp16,
     use_new_attention_order,
+    dims,
+    in_channels,
 ):
     model = create_model(
         image_size,
@@ -113,6 +117,9 @@ def create_model_and_diffusion(
         resblock_updown=resblock_updown,
         use_fp16=use_fp16,
         use_new_attention_order=use_new_attention_order,
+        dims=dims,
+        in_channels=in_channels,
+        
     )
     diffusion = create_gaussian_diffusion(
         steps=diffusion_steps,
@@ -144,6 +151,9 @@ def create_model(
     resblock_updown=False,
     use_fp16=False,
     use_new_attention_order=False,
+    dims=3,
+    in_channels=1,
+    
 ):
     if channel_mult == "":
         if image_size == 512:
@@ -163,11 +173,16 @@ def create_model(
     for res in attention_resolutions.split(","):
         attention_ds.append(image_size // int(res))
 
+    if learn_sigma:     
+        out_channels = in_channels * 2 
+    else: 
+        out_channels = in_channels 
+
     return UNetModel(
         image_size=image_size,
-        in_channels=3,
+        in_channels=in_channels,
         model_channels=num_channels,
-        out_channels=(3 if not learn_sigma else 6),
+        out_channels=out_channels, 
         num_res_blocks=num_res_blocks,
         attention_resolutions=tuple(attention_ds),
         dropout=dropout,
@@ -181,6 +196,7 @@ def create_model(
         use_scale_shift_norm=use_scale_shift_norm,
         resblock_updown=resblock_updown,
         use_new_attention_order=use_new_attention_order,
+        dims=dims,
     )
 
 

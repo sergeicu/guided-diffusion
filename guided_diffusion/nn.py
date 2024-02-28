@@ -18,6 +18,9 @@ class GroupNorm32(nn.GroupNorm):
     def forward(self, x):
         return super().forward(x.float()).type(x.dtype)
 
+class GroupNorm8(nn.GroupNorm):
+    def forward(self, x):
+        return super().forward(x.float()).type(x.dtype)
 
 def conv_nd(dims, *args, **kwargs):
     """
@@ -97,7 +100,8 @@ def normalization(channels):
     :param channels: number of input channels.
     :return: an nn.Module for normalization.
     """
-    return GroupNorm32(32, channels)
+    # return GroupNorm32(32, channels)
+    return GroupNorm8(8, channels)
 
 
 def timestep_embedding(timesteps, dim, max_period=10000):
