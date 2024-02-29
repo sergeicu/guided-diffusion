@@ -40,7 +40,7 @@ def main():
     
     root="./data/acdc/data_ED_ES/"
     dataset = ACDCDataset(root,  split='train', transforms=None)
-    dataloader = get_dataloader(dataset, batch_size=1, num_workers=0, train=False)    
+    dataloader = get_dataloader(dataset, batch_size=args.batch_size, num_workers=0, train=False)    
     def data_generator(dataloader):
         while True:  # Ensures infinite loop, useful for training multiple epochs
             for batch in dataloader:
@@ -74,11 +74,11 @@ def create_argparser():
         lr=1e-4,
         weight_decay=0.0,
         lr_anneal_steps=0,
-        batch_size=1,
+        batch_size=4,
         microbatch=-1,  # -1 disables microbatches
         ema_rate="0.9999",  # comma-separated list of EMA values
         log_interval=10,
-        save_interval=10000,
+        save_interval=500,
         resume_checkpoint="",
         use_fp16=False,
         fp16_scale_growth=1e-3,

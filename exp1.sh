@@ -5,3 +5,6 @@ python scripts/image_train.py
 
 # files saved to /tmp in ankara
 cat /tmp/openai-2024-02-28-05-12-16-486120/log.txt
+
+# test 
+python scripts/image_sample.py

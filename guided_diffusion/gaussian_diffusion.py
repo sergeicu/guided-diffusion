@@ -503,7 +503,8 @@ class GaussianDiffusion:
         Arguments are the same as p_sample_loop().
         Returns a generator over dicts, where each dict is the return value of
         p_sample().
-        """
+        """        
+        
         if device is None:
             device = next(model.parameters()).device
         assert isinstance(shape, (tuple, list))
@@ -522,6 +523,12 @@ class GaussianDiffusion:
         for i in indices:
             t = th.tensor([i] * shape[0], device=device)
             with th.no_grad():
+                
+                # from IPython import embed; embed()
+                #(args.batch_size, 3, args.image_size, args.image_size)
+                #img = th.randn(*(4, 1, 32, 128, 128), device=device)
+                #t = th.tensor([i] * shape[0], device=device)
+                
                 out = self.p_sample(
                     model,
                     img,
