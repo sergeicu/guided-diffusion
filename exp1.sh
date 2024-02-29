@@ -1,7 +1,8 @@
 # train 
 cd /fileserver/Rad-Warfield-e2/Groups/Imp-Recons/serge/code/diffusion/experiments/s20240209_oecorr/guided-diffusion
 conda activate dps_mpi
-python scripts/image_train.py
+python scripts/image_train.py # training with f30840848f5fda925ad51227df51c3fdb52735e6 -> batch size of 1 
+python scripts/image_train.py # training with next commit -> batch size of 32 
 
 
 
