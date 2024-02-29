@@ -59,7 +59,7 @@ def main():
 
 def create_argparser():
     defaults = dict(
-        data_dir="/fileserver/Rad-Warfield-e2/Groups/Imp-Recons/serge/code/diffusion/experiments/s20240209_oecorr/guided-diffusion/lsun/data/",
+        data_dir="/fileserver/Rad-Warfield-e2/Groups/Imp-Recons/serge/code/diffusion/experiments/s20240209_oecorr/guided-diffusion/data/acdc_png/train/",
         schedule_sampler="uniform",
         lr=1e-4,
         weight_decay=0.0,
